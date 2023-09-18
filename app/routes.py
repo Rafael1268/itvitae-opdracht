@@ -21,7 +21,7 @@ def home():
         post = Post(body=form.post.data, author=current_user)
         db.session.add(post)
         db.session.commit()
-        flash('Succesfully posted')
+        flash('Successfully posted')
         return redirect(url_for('home'))
     page = request.args.get('page', 1, type=int)
     posts = current_user.followed_posts().paginate(page=page, per_page=app.config['POSTS_PER_PAGE'], error_out=False)
