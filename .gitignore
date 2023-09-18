@@ -1,0 +1,9 @@
+/Lib
+/__pycache__
+/Include
+/Logs
+/migrations
+/Scripts
+.flaskenv
+pyvenv.cfg
+app.db

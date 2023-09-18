@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class='user_info'>
+    <img src='{{ user.avatar(50) }}'>
+    <h1>{{ user.username }}</h1>
+</div>
+{% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
+{% if user.last_seen %}<p class='last_seen'>Last seen on: {{ user.last_seen }}</p>{% endif %}
+<p>{{ user.followers.count() }} followers, {{ user.followed.count() }} following</p>
+{% if user == current_user %}
+<a href="{{ url_for('settings') }}">Edit</a>
+{% elif not current_user.is_following(user) %}
+<p>
+    <form action="{{ url_for('follow', username=user.username) }}" method='post'>
+        {{ form.hidden_tag() }}
+        {{ form.submit(value='Follow') }}
+    </form>
+</p>
+{% else %}
+<p>
+    <form action="{{ url_for('unfollow', username=user.username) }}" method='post'>
+        {{ form.hidden_tag() }}
+        {{ form.submit(value='Unfollow') }}
+    </form>
+</p>
+{% endif %}
+{% for post in posts %}
+    {% include '_post.html' %}
+{% endfor %}
+{% if prev_url %}
+<a href='{{ prev_url }}'>Previous Page</a>
+{% endif %}
+{% if next_url %}
+<a href='{{ next_url }}'>Next Page</a>
+{% endif %}
+{% endblock %}
