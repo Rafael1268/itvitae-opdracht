@@ -142,4 +142,20 @@ def unfollow(username):
         flash('You unfollowed {}'.format(username))
         return redirect(url_for('user', username=username))
     else:
-        return redirect(url_for('index'))
+        return redirect(url_for('home'))
+    
+@app.route('/like/<post_id>', methods=['POST'])
+@login_required
+def like(post_id):
+    post = Post.query.filter_by(id=post_id).first()
+    current_user.like(post)
+    db.session.commit()
+    return redirect(url_for('home'))
+
+@app.route('/unlike/<post_id>', methods=['POST'])
+@login_required
+def unlike(post_id):
+    post = Post.query.filter_by(id=post_id).first()
+    current_user.unlike(post)
+    db.session.commit()
+    return redirect(url_for('home'))

@@ -91,6 +91,42 @@ class UserModelCase(unittest.TestCase):
         self.assertEqual(f2, [p2, p3])
         self.assertEqual(f3, [p3, p4])
         self.assertEqual(f4, [p4])
+    
+    def test_liked_posts(self):
+        # create four users
+        u1 = User(username='john', email='john@example.com')
+        u2 = User(username='susan', email='susan@example.com')
+        u3 = User(username='mary', email='mary@example.com')
+        u4 = User(username='david', email='david@example.com')
+        db.session.add_all([u1, u2, u3, u4])
+
+        # create four posts
+        now = datetime.utcnow()
+        p1 = Post(body="post from john", author=u1,
+                  timestamp=now + timedelta(seconds=1))
+        p2 = Post(body="post from susan", author=u2,
+                  timestamp=now + timedelta(seconds=4))
+        p3 = Post(body="post from mary", author=u3,
+                  timestamp=now + timedelta(seconds=3))
+        p4 = Post(body="post from david", author=u4,
+                  timestamp=now + timedelta(seconds=2))
+        db.session.add_all([p1, p2, p3, p4])
+        db.session.commit()
+
+        # setup the likes
+        u1.like(p3)  # john likes post 3
+        u1.like(p1)  # john likes post 1
+        u2.like(p1)  # susan likes post 1
+        u1.like(p2)  # john likes post 2
+        db.session.commit()
+
+        # check the liked posts of john
+        f1 = u1.liked_posts().all()
+        self.assertEqual(f1, [p2, p3, p1])
+        f2 = u1.has_liked(p2)
+        self.assertEqual(f2, True)
+        f3 = p1.liked.count()
+        self.assertEqual(f3, 2)
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
