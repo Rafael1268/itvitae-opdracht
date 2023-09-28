@@ -52,6 +52,7 @@ p, h1, h2, h3, h4, h5, h6 {
 /* Variables */
 :root {
   --main-color: #007bff;
+  --l-main-color: #e8f3ff;
   --l-grey-color: #c8c8c8;
   --d-grey-color: #646464;
   --l-black-color: #262626;
@@ -106,6 +107,16 @@ a {
   text-decoration: none;
 }
 
+.header_user_info {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.header_user_info img {
+  border-radius: 100%;
+}
+
 .logo_div {
   display: flex;
   align-items: center;
@@ -142,22 +153,40 @@ a {
 #submit {
   margin-top: 10px;
   margin-bottom: 5px;
-  padding: 0 15px;
+  padding: 5px 25px;
+  background-color: var(--l-main-color);
   transition: all 0.1s;
-  border: 2px solid var(--d-grey-color);
-  border-radius: 5px;
+  border: 2px solid var(--l-main-color);
+  border-radius: 10px;
 }
 
 #submit:hover {
   border: 2px solid var(--main-color);
 }
 
+/* Main Page */
+.new_post_form {
+  margin-top: 20px;
+}
+
+.next_previous_page {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.next_previous_page {
+  font-size: 20px;
+  fill: var(--l-black-color)
+}
+
 /* Posts */
 .post {
   width: 70vw;
   margin-top: 25px;
-  padding: 5px 20px;
-  border: 2px solid var(--d-grey-color);
+  padding: 15px 15px;
+  background-color: var(--l-main-color);
   border-radius: 10px;
 }
 
@@ -165,12 +194,16 @@ a {
 .post_user {
   display: flex;
   align-items: center;
+  margin-bottom: 5px;
 }
 
 .user_info img,
 .post_user img {
-  border: 2px solid var(--main-color);
   border-radius: 100%;
+}
+
+.post_user a {
+  text-decoration: none;
 }
 
 .user_info img {
@@ -178,13 +211,14 @@ a {
 }
 
 .post_user img {
-  margin-right: 5px;
+  margin-right: 10px;
 }
 
 .post_bottom {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-top: 5px;
 }
 
 .post_timestamp {

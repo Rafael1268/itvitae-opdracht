@@ -24,7 +24,7 @@
             <a href="{{ url_for('login') }}">Login</a>
             <a href="{{ url_for('register') }}">Register</a>
             {% else %}
-            <a href="{{ url_for('user', username=current_user.username) }}">{{ current_user.username }}</a>
+            <a href="{{ url_for('user', username=current_user.username) }}" class='header_user_info'><img src='{{ current_user.avatar(23) }}'>{{ current_user.username }}</a>
             <a href="{{ url_for('logout') }}">Logout</a>
             {% endif %}
         </div>
