@@ -9,7 +9,7 @@ followers = db.Table('followers',
     db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
 )
 
-likes = db.Table('likes',
+likes_table = db.Table('likes_table',
     db.Column('liked_user_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('liked_post_id', db.Integer, db.ForeignKey('post.id'))
 )
@@ -30,11 +30,11 @@ class User(UserMixin, db.Model):
         backref=db.backref('followers', lazy='dynamic'),
         lazy='dynamic'
     )
-    liked = db.relationship(
+    likes_user = db.relationship(
         'Post',
-        secondary=likes,
-        primaryjoin=(likes.c.liked_user_id == id),
-        backref=db.backref('likes', lazy='dynamic'),
+        secondary=likes_table,
+        primaryjoin=(likes_table.c.liked_user_id == id),
+        back_populates='likes_post',
         lazy='dynamic'
     )
 
@@ -72,19 +72,19 @@ class User(UserMixin, db.Model):
 
     def like(self, post):
         if not self.has_liked(post):
-            self.liked.append(post)
+            self.likes_user.append(post)
 
     def unlike(self, post):
         if self.has_liked(post):
-            self.liked.remove(post)
+            self.likes_user.remove(post)
     
     def has_liked(self, post):
-        return self.followed.filter(
-            likes.c.liked_post_id == post.id).count() > 0
+        return self.likes_user.filter(
+            likes_table.c.liked_post_id == post.id).count() > 0
     
     def liked_posts(self):
         liked = Post.query.join(
-            likes, (likes.c.liked_user_id == self.id))
+            likes_table, (likes_table.c.liked_user_id == self.id))
         return liked.order_by(Post.timestamp.desc())
 
 @login.user_loader
@@ -96,11 +96,11 @@ class Post(db.Model):
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    liked = db.relationship(
+    likes_post = db.relationship(
         'User',
-        secondary=likes,
-        primaryjoin=(likes.c.liked_post_id == id),
-        backref=db.backref('likes', lazy='dynamic'),
+        secondary=likes_table,
+        primaryjoin=(likes_table.c.liked_post_id == id),
+        back_populates='likes_user',
         lazy='dynamic'
     )
 
