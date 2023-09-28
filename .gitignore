@@ -1,5 +1,6 @@
 /Lib
 __pycache__/
+/App/__pycache__
 /Include
 /Logs
 /migrations
